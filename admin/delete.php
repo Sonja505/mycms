@@ -7,37 +7,55 @@ session_start();
 	$article = new Article;
 
 if (isset($_SESSION['logged_in'])) {
-	$articles= $article->fetch_all();
+
+	if (isset($_GET['id'])) {
+
+		$id = $_GET['id'];
+
+		$query = $pdo->prepare('DELETE FROM articles WHERE article_id = ?');
+		$query->bindValue(1, $id);
+		$query->execute();
+
+		header('Location: delete.php');
+	}
+
+		$articles= $article->fetch_all();
 ?>
 
-<!DOCTYPE html>
-		<html>
-		<head>
-			<title>CMS </title>
-			<link rel="stylesheet" type="text/css" href="../assets/style.css">
-		</head>
-		<body>
-			<div class="container">
-				<a href="index.php" id="logo">CMS</a>
-				<br>
-			<form action="delete.php" method="get">
-				<select onchange="this.form.submit();">
-					<?php foreach ($articles as $article){ ?> 
-						<option value=" <?php echo $article['article_id'];?>">	<?php echo $article['article_title'];?>
-							
-						</option>
-				<?php	} ?>
-				</select>
-							</form>
-		</div>
-		</body>
-		</html>
+		<!DOCTYPE html>
+				<html>
+				<head>
+					<title>CMS </title>
+					<link rel="stylesheet" type="text/css" href="../assets/style.css">
+				</head>
+				<body>
+					<div class="container">
+						<a href="index.php" id="logo">CMS</a>
+						<br>
+
+						<h4>
+							Select an article to delete
+						</h4>
+					<form action="delete.php" method="get" >
+						<select onchange="this.form.submit();" name="id">
+							<?php foreach ($articles as $article)  
+							{ ?> 
+									<option value="<?php echo $article['article_id']  ?>" >
+										<?php echo $article['article_title']; ?>
+									</option>
+							<?php	
+							} ?>
+						</select>
+					</form>
+				</div>
+				</body>
+				</html>
 
 
-<?php
+	<?php
 }
-else{
-	header('Location: index.php');
-}
+		else{
+			header('Location: index.php');
+		}
 
-?>
+	?>

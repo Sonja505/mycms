@@ -35,7 +35,7 @@ else{
 	//display login
 	if (isset($_POST['username'], $_POST['password'])) {
 		$username = $_POST['username'];
-		$password = md5($_POST['password']);
+		$password = ($_POST['password']);
 
 
 		if (empty($username) or empty($password)) {
